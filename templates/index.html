@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Content Generator</title>
+    <script>
+        async function generateContent() {
+            const userInput = document.getElementById('user_input').value;
+
+            if (userInput.trim() !== '') {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'user_input=' + encodeURIComponent(userInput)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('generated_text').innerText = result.generated_text;
+                } else {
+                    document.getElementById('generated_text').innerText = 'Error: ' + result.error;
+                }
+            } else {
+                alert('Please enter some text.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>AI Content Generator</h1>
+    <textarea id="user_input" rows="4" cols="50" placeholder="Enter text here..."></textarea><br><br>
+    <button onclick="generateContent()">Generate</button>
+    <h3>Generated Content:</h3>
+    <p id="generated_text"></p>
+</body>
+</html>
